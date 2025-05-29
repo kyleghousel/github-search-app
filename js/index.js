@@ -29,14 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
     repoList.innerHTML = ''
 
     const repoHeader = document.createElement('h2')
-    repoHeader.textContent = `Repos For ${repos[0].owner.login}`
+    repoHeader.textContent = `Repos`
     repoList.appendChild(repoHeader)
 
-    repos.forEach(repo => {
-      repoList.innerHTML += `
-      <li><a href=${repo.html_url}>${repo.name}</a></li>
-      `
-    })
+    if (Array.isArray(repos)) {
+      repos.forEach(repo => {
+        repoList.innerHTML += `
+        <li><a href=${repo.html_url}>${repo.name}</a></li>
+        `
+      })
+    } else {
+      repos.items.forEach(repo => {
+        repoList.innerHTML += `
+        <li><a href=${repo.html_url}>${repo.name}</a></li>
+        `
+      })
+    }
   }
 
   const searchUser = (user) => {
@@ -56,6 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`https://api.github.com/users/${targetUser}/repos?per_page=50`)
       .then(res => res.json())
       .then(appendRepos)
+      .catch(error => console.log('Error: ', error.message))
+  }
+
+  const searchRepos = (keyword) => {
+    fetch(`https://api.github.com/search/repositories?q=${keyword}+language:javascript&sort=stars&order=desc`)
+      .then(res => res.json())
+      .then(appendRepos)
+      .catch(error => console.log('Error: ', error.message))
   }
 
   form.addEventListener('submit', (e) => {
@@ -64,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (filterSelect.value === 'users') {
       searchUser(searchInput.value)
     } else if (filterSelect.value === 'repos') {
-      fetchUserRepos(searchInput.value)
+      searchRepos(searchInput.value)
     }
 
     searchInput.value = ''
