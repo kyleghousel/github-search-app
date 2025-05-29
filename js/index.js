@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `
       })
     } else {
+      userList.innerHTML = ''
       repos.items.forEach(repo => {
         repoList.innerHTML += `
         <li><a href=${repo.html_url}>${repo.name}</a></li>
