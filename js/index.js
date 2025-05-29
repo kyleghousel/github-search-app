@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#github-form')
   const searchInput = document.querySelector('#search')
+  const filterSelect = document.querySelector('#search-filter')
   const userList = document.querySelector('#user-list')
   const repoList = document.querySelector('#repos-list')
 
@@ -52,14 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const fetchUserRepos = (targetUser) => {
-    fetch(`https://api.github.com/users/${targetUser}/repos`)
+    fetch(`https://api.github.com/users/${targetUser}/repos?per_page=50`)
       .then(res => res.json())
       .then(appendRepos)
   }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault()
-    searchUser(searchInput.value)
+
+    if (filterSelect.value === 'users') {
+      searchUser(searchInput.value)
+    } else if (filterSelect.value === 'repos') {
+      fetchUserRepos(searchInput.value)
+    }
+
     searchInput.value = ''
   })
 })
