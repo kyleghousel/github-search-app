@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const userLi = document.createElement('li')
       userLi.innerHTML = `
       <div>
-        <h3>${user.login}</h3>
+        <h2>${user.login}</h2>
         <a href=${user.html_url}>Github Profile</a>
       </div>
         <img src=${user.avatar_url} alt='user-avatar' style='width: 200px; height: 200px; border-radius: 50%'/>
